@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memories</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Custom cursor styling */
+        body {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="%23FFFFFF" stroke="%23A3B18A" stroke-width="3.25" stroke-linejoin="round" d="M12 8S9.75 5 7 5a4.5 4.5 0 0 0-4.5 4.5C2.5 14.5 12 20 12 20s9.5-5.5 9.5-10.5A4.5 4.5 0 0 0 17 5c-2.75 0-5 3-5 3Z"></path></svg>') 18 18, auto;
+        }
+        
+        /* Love cursor for button */
+        .btn {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="%23FF6B6B" stroke="%23FF0000" stroke-width="2" stroke-linejoin="round" d="M12 8S9.75 5 7 5a4.5 4.5 0 0 0-4.5 4.5C2.5 14.5 12 20 12 20s9.5-5.5 9.5-10.5A4.5 4.5 0 0 0 17 5c-2.75 0-5 3-5 3Z"></path></svg>') 18 18, pointer;
+        }
+
+        /* Base Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            position: relative;
+            background-color: #FEFAE0;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Checkered Background */
+        .checkered-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            grid-template-rows: repeat(20, 1fr);
+        }
+        
+        .checkered-bg div {
+            background-color: #CCD5AE;
+            opacity: 0.2;
+        }
+        
+        .checkered-bg div:nth-child(even) {
+            background-color: #FEFAE0;
+        }
+        
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #CCD5AE;
+            color: #606C38;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background-color: #D4E09B;
+            transform: translateX(-3px);
+        }
+        
+        .back-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #606C38;
+        }
+        
+        /* Decorative Elements */
+        .leaf {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.6;
+            z-index: 0;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        .leaf1 { top: 10%; left: 10%; animation-delay: 0s; }
+        .leaf2 { top: 10%; right: 10%; animation-delay: 1.5s; }
+        .leaf3 { bottom: 10%; left: 10%; animation-delay: 3s; }
+        .leaf4 { bottom: 10%; right: 10%; animation-delay: 4.5s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        
+        /* Title Styling */
+        .title {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #606C38;
+            font-size: 28px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-align: center;
+            z-index: 10;
+        }
+        
+        .title::after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: #CCD5AE;
+            margin: 10px auto 0;
+            border-radius: 10px;
+        }
+        
+        /* Gallery Styles - Optimized */
+        .gallery-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 40px 0;
+            perspective: 1000px;
+        }
+        
+        .gallery {
+      --d: 10s;
+    display: grid;
+    place-items: center;
+    width: 220px;
+    position: absolute;
+    top: 55%; /* Adjust this so the gallery appears below the GIF */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1; /* Make sure the gallery stays below the GIF */
+}
+
+  
+  .gallery > img {
+    grid-area: 1/1;
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border: 10px solid #f2f2f2;
+    box-shadow: 0 0 4px #0007;
+    z-index: 2;
+    animation: slide var(--d) infinite, z-order var(--d) infinite steps(1);
+  }
+  
+  .gallery img:last-child {
+    animation-name: slide, z-order-last;
+  }
+  
+  .gallery > img:nth-child(1) {
+    animation-delay: calc(0*var(--d));
+    --r: 16deg;
+  }
+  
+  .gallery > img:nth-child(2) {
+    animation-delay: calc(-0.2*var(--d));
+    --r: -1deg;
+  }
+  
+  .gallery > img:nth-child(3) {
+    animation-delay: calc(-0.4*var(--d));
+    --r: -19deg;
+  }
+  
+  .gallery > img:nth-child(4) {
+    animation-delay: calc(-0.6*var(--d));
+    --r: 6deg;
+  }
+  
+  .gallery > img:nth-child(5) {
+    animation-delay: calc(-0.8*var(--d));
+    --r: -8deg;
+  }
+  
+  @keyframes slide {
+    10% {
+      transform: translateX(120%) rotate(var(--r));
+    }
+    0%, 100%, 20% {
+      transform: translateX(0%) rotate(var(--r));
+    }
+  }
+  
+  @keyframes z-order {
+    10%, 20% {
+      z-index: 1;
+    }
+    80% {
+      z-index: 2;
+    }
+  }
+  
+  @keyframes z-order-last {
+    10%, 20% {
+      z-index: 1;
+    }
+    90% {
+      z-index: 2;
+    }
+  }
+        
+        /* Frame Decoration */
+        .frame {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            border: 3px solid #CCD5AE;
+            border-radius: 10px;
+            z-index: 0;
+            box-shadow: 0 0 0 10px #FEFAE0, 0 0 0 13px #E9EDC9;
+        }
+        
+        /* Caption Styling */
+        .caption {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #606C38;
+            font-size: 14px;
+            font-weight: 300;
+            text-align: center;
+            background-color: rgba(254, 250, 224, 0.8);
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+            pointer-events: none;
+        }
+        
+        .gallery > img:hover + .caption {
+            opacity: 1;
+        }
+        
+        /* Decorative Corner Elements */
+        .corner {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            z-index: 0;
+        }
+        
+        .corner-tl {
+            top: -5px;
+            left: -5px;
+            border-top: 3px solid #CCD5AE;
+            border-left: 3px solid #CCD5AE;
+            border-top-left-radius: 10px;
+        }
+        
+        .corner-tr {
+            top: -5px;
+            right: -5px;
+            border-top: 3px solid #CCD5AE;
+            border-right: 3px solid #CCD5AE;
+            border-top-right-radius: 10px;
+        }
+        
+        .corner-bl {
+            bottom: -5px;
+            left: -5px;
+            border-bottom: 3px solid #CCD5AE;
+            border-left: 3px solid #CCD5AE;
+            border-bottom-left-radius: 10px;
+        }
+        
+        .corner-br {
+            bottom: -5px;
+            right: -5px;
+            border-bottom: 3px solid #CCD5AE;
+            border-right: 3px solid #CCD5AE;
+            border-bottom-right-radius: 10px;
+        }
+        
+        /* Polaroid Effect */
+        .polaroid-effect {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 30px;
+            background-color: #FEFAE0;
+            z-index: -1;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Next Surprise Button */
+        .surprise-btn {
+            background-color: #CCD5AE;
+            color: #606C38;
+            border: none;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(204, 213, 174, 0.5);
+            font-family: 'Nunito', sans-serif;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            margin-top: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .surprise-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .surprise-btn:hover::before {
+            left: 100%;
+        }
+
+        .surprise-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(204, 213, 174, 0.6);
+            background-color: #D4E09B;
+        }
+
+        .surprise-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(204, 213, 174, 0.4);
+        }
+
+        /* Footer styling */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            color: #6C7B52;
+            background-color: rgba(254, 250, 224, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2;
+            border-top: 1px solid rgba(204, 213, 174, 0.5);
+        }
+        
+        .footer span {
+            font-weight: 600;
+            color: #606C38;
+        }
+    </style>
+</head>
+<body>
+    <!-- Checkered Background -->
+    <div class="checkered-bg" id="checkeredBg"></div>
+
+    <!-- Back Button -->
+    <button class="back-btn" id="backBtn">
+        <svg viewBox="0 0 24 24">
+            <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path>
+        </svg>
+    </button>
+    
+    <!-- Decorative Leaves -->
+    <div class="leaf leaf1">🌿</div>
+    <div class="leaf leaf2">🌱</div>
+    <div class="leaf leaf3">☘️</div>
+    <div class="leaf leaf4">🍃</div>
+    
+    <!-- Title -->
+    <h1 class="title">Photo Memories</h1>
+    
+    <!-- Gallery Container -->
+    <div class="gallery-container">
+        <!-- Decorative Frame -->
+        <div class="frame">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+        </div>
+        
+        <!-- Gallery -->
+            <!-- Gallery Section -->
+    <div class="gallery">
+      <img src="b 5.jpeg" alt="a lovely kiss in the night">
+      <img src="b 1.jpeg" alt="a woman inside a car">
+      <img src="b 2.jpeg" alt="a baby">
+      <img src="b 3.jpeg" alt="a girl in the forest">
+      <img src="b 4.jpeg" alt="a girl">
+    </div>
+            
+            <div class="polaroid-effect"></div>
+        </div>
+    </div>
+
+    <!-- Next Surprise Button -->
+    <button class="surprise-btn" id="surpriseBtn">Next Surprise!</button>
+
+    <!-- Footer -->
+    <div class="footer">Made by <span>Lellobyy</span></div>
+
+    <script>
+        // Create checkered background
+        const checkeredBg = document.getElementById('checkeredBg');
+        for (let i = 0; i < 400; i++) {
+            const square = document.createElement('div');
+            checkeredBg.appendChild(square);
+        }
+        
+        // Optimized hover effect for images
+        const images = document.querySelectorAll('.gallery > img');
+        images.forEach(img => {
+            let currentTransform = '';
+            
+            // Store the original transform when mouse enters
+            img.addEventListener('mouseenter', function() {
+                currentTransform = this.style.transform;
+                this.style.transform = currentTransform + ' scale(1.05)';
+                this.style.boxShadow = '0 12px 30px rgba(0, 0, 0, 0.2)';
+                this.style.zIndex = '10';
+            });
+            
+            // Restore the original transform when mouse leaves
+            img.addEventListener('mouseleave', function() {
+                this.style.transform = currentTransform;
+                this.style.boxShadow = '';
+                this.style.zIndex = '';
+            });
+        });
+        
+        // Create floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'absolute';
+            particle.style.width = '8px';
+            particle.style.height = '8px';
+            particle.style.backgroundColor = Math.random() > 0.5 ? '#CCD5AE' : '#E9EDC9';
+            particle.style.borderRadius = '50%';
+            particle.style.opacity = '0.6';
+            particle.style.pointerEvents = 'none';
+            particle.style.willChange = 'transform, opacity';
+            
+            // Random position
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            particle.style.left = `${x}px`;
+            particle.style.top = `${y}px`;
+            
+            document.body.appendChild(particle);
+            
+            // Animation
+            const duration = 5 + Math.random() * 10;
+            const animation = particle.animate([
+                { transform: 'translateY(0)', opacity: 0.6 },
+                { transform: 'translateY(-100px)', opacity: 0 }
+            ], {
+                duration: duration * 1000,
+                easing: 'ease-out'
+            });
+            
+            animation.onfinish = () => particle.remove();
+        }
+        
+        // Create particles periodically
+        setInterval(createParticle, 2000);
+
+        // Next Surprise button functionality
+        document.getElementById('surpriseBtn').addEventListener('click', function() {
+            // Button animation
+            this.animate([
+                { transform: 'scale(0.95)' },
+                { transform: 'scale(1)' }
+            ], {
+                duration: 150,
+                easing: 'ease-out'
+            });
+            
+            // Change button text temporarily
+            const originalText = this.textContent;
+            this.textContent = 'Loading...';
+            
+            // Redirect after short delay
+            setTimeout(() => {
+                window.location.href = "song.html";
+            }, 500);
+        });
+
+        // Redirect to home.html when button is clicked
+        document.getElementById('backBtn').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Envelope Note</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&amp;family=Dancing+Script:wght@400;600&amp;display=swap" rel="stylesheet">
+    <style>
+
+         /* Custom cursor styling */
+        body {
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="%23FFFFFF" stroke="%23A3B18A" stroke-width="3.25" stroke-linejoin="round" d="M12 8S9.75 5 7 5a4.5 4.5 0 0 0-4.5 4.5C2.5 14.5 12 20 12 20s9.5-5.5 9.5-10.5A4.5 4.5 0 0 0 17 5c-2.75 0-5 3-5 3Z"></path></svg>') 18 18, auto;
+        }
+        
+        /* Love cursor for button */
+        .btn {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="%23FF6B6B" stroke="%23FF0000" stroke-width="2" stroke-linejoin="round" d="M12 8S9.75 5 7 5a4.5 4.5 0 0 0-4.5 4.5C2.5 14.5 12 20 12 20s9.5-5.5 9.5-10.5A4.5 4.5 0 0 0 17 5c-2.75 0-5 3-5 3Z"></path></svg>') 18 18, pointer;
+        }
+        
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FEFAE0;
+            color: #606C38;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Background Pattern */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+        
+        .bg-pattern::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(#CCD5AE 2px, transparent 2px) 0 0 / 30px 30px,
+                radial-gradient(#CCD5AE 1px, transparent 1px) 15px 15px / 30px 30px;
+        }
+        
+        /* Back Button */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #CCD5AE;
+            color: #606C38;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-btn:hover {
+            background-color: #D4E09B;
+            transform: translateX(-3px);
+        }
+        
+        .back-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #606C38;
+        }
+        
+        /* Decorative Elements */
+        .decorative-element {
+            position: fixed;
+            font-size: 24px;
+            opacity: 0.6;
+            z-index: 0;
+            animation: float 8s infinite ease-in-out;
+            pointer-events: none;
+        }
+        
+        .element1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .element2 { top: 15%; right: 5%; animation-delay: 2s; }
+        .element3 { bottom: 15%; left: 5%; animation-delay: 4s; }
+        .element4 { bottom: 10%; right: 5%; animation-delay: 6s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0); }
+            50% { transform: translateY(-15px) rotate(5deg); }
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #606C38;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            font-weight: 300;
+            color: #6C7B52;
+        }
+        
+        /* Envelope Container */
+        .envelope-container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            margin: 0 auto;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+        
+        .envelope-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Envelope */
+        .envelope {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        /* Envelope Front */
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #CCD5AE;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid #E9EDC9;
+        }
+        
+        /* Envelope Flap */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(0 0, 50% 40%, 100% 0, 100% 100%, 0 100%);
+            background-color: #D4E09B;
+            z-index: 1;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+        }
+        
+        .envelope-flap::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%);
+        }
+        
+        .envelope-body {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #CCD5AE;
+            z-index: 0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .envelope-body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 50%);
+        }
+        
+        /* Envelope Seal */
+        .envelope-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background-color: #E9EDC9;
+            border-radius: 50%;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border: 1px solid #606C38;
+        }
+        
+        .envelope-seal::before {
+            content: "❤";
+            font-size: 20px;
+            color: #606C38;
+        }
+        
+        /* Envelope Pattern */
+        .envelope-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            background-image: 
+                radial-gradient(#606C38 2px, transparent 2px),
+                radial-gradient(#606C38 2px, transparent 2px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            z-index: 0;
+        }
+        
+        /* Note Modal */
+        .note-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .note-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Note Paper */
+        .note-paper {
+            width: 90%;
+            max-width: 400px;
+            background-color: #FEFAE0;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform: translateY(50px) scale(0.9);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid #CCD5AE;
+        }
+        
+        .note-modal.active .note-paper {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        
+        /* Note Content */
+        .note-content {
+            font-family: 'Dancing Script', cursive;
+            color: #606C38;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        
+        .note-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #606C38;
+        }
+        
+        .note-message {
+            font-size: 20px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .note-signature {
+            font-size: 22px;
+            font-weight: 600;
+            text-align: right;
+            margin-top: 20px;
+        }
+        
+        /* Note Pattern */
+        .note-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background-image: 
+                linear-gradient(#CCD5AE 1px, transparent 1px),
+                linear-gradient(90deg, #CCD5AE 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: 0;
+            border-radius: 10px;
+        }
+        
+        /* Paper Decorations */
+        .paper-decoration {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.2;
+            z-index: 0;
+        }
+        
+        .paper-decoration-1 {
+            top: 20px;
+            left: 20px;
+        }
+        
+        .paper-decoration-2 {
+            bottom: 20px;
+            right: 20px;
+        }
+        
+        /* Close Button */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #CCD5AE;
+            color: #606C38;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 2;
+        }
+        
+        .close-btn:hover {
+            background-color: #D4E09B;
+            transform: scale(1.1);
+        }
+        
+        /* Decorative Hearts */
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #CCD5AE;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 10;
+            animation: float-heart 3s forwards ease-out;
+        }
+        
+        @keyframes float-heart {
+            0% { transform: translateY(0) scale(0.5); opacity: 0; }
+            10% { opacity: 0.8; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+        
+        /* Paper Fold Effect */
+        .paper-fold {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(135deg, #CCD5AE 50%, transparent 50%);
+            border-radius: 0 0 0 5px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 400px) {
+            .envelope-container {
+                width: 260px;
+                height: 180px;
+            }
+            
+            .note-title {
+                font-size: 24px;
+            }
+            
+            .note-message {
+                font-size: 18px;
+            }
+        }
+                /* Footer styling */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            color: #6C7B52;
+            background-color: rgba(254, 250, 224, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2;
+            border-top: 1px solid rgba(204, 213, 174, 0.5);
+        }
+        
+        .footer span {
+            font-weight: 600;
+            color: #606C38;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Pattern -->
+    <div class="bg-pattern"></div>
+    
+    <!-- Back Button -->
+    <button class="back-btn" id="backBtn">
+        <svg viewBox="0 0 24 24">
+            <path d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z"></path>
+        </svg>
+        
+    </button>
+    
+    <!-- Decorative Elements -->
+    <div class="decorative-element element1">🌸</div>
+    <div class="decorative-element element2">✨</div>
+    <div class="decorative-element element3">🌿</div>
+    <div class="decorative-element element4">🌱</div>
+    
+    <!-- Header -->
+    <div class="header">
+        <h1 class="title">A Special Note</h1>
+        <p class="subtitle">Click the envelope to open</p>
+    </div>
+    
+    <!-- Envelope Container -->
+    <div class="envelope-container">
+        <div class="envelope" id="envelope" style="">
+            <!-- Envelope Front -->
+            <div class="envelope-front">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body"></div>
+                <div class="envelope-pattern"></div>
+                <div class="envelope-seal"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Note Modal -->
+    <div class="note-modal" id="noteModal">
+        <div class="note-paper">
+            <div class="paper-fold"></div>
+            <div class="note-pattern"></div>
+            <div class="paper-decoration paper-decoration-1">🌸</div>
+            <div class="paper-decoration paper-decoration-2">🌿</div>
+            
+            <div class="note-content">
+                <h2 class="note-title">Dear my baby,</h2>
+                <p class="note-message">
+                    
+Thank you for everything you've done for me.
+This might not be much, but it's my way of showing how much I appreciate you.
+Thank you for your love, your time, your care, and for always making me feel special.
+I'm so lucky to have you.
+I pray our relationship will stay strong and last forever.
+With you, everything feels just right.
+                </p>
+                <p class="note-signature">With love ❤</p>
+            </div>
+            
+            <button class="close-btn" id="closeBtn">×</button>
+        </div>
+    </div>
+
+        <!-- Footer -->
+    <div class="footer">Made by <span>Lellobyy</span></div>
+
+    <script>
+        // DOM Elements
+        const envelope = document.getElementById('envelope');
+        const noteModal = document.getElementById('noteModal');
+        const closeBtn = document.getElementById('closeBtn');
+        const backBtn = document.getElementById('backBtn');
+        
+        // Open note when envelope is clicked
+        envelope.addEventListener('click', function() {
+            noteModal.classList.add('active');
+            createHearts();
+            
+            // Add shake animation to envelope
+            this.style.transform = 'translateY(-10px)';
+            setTimeout(() => {
+                this.style.transform = '';
+            }, 300);
+        });
+        
+        // Close note when close button is clicked
+        closeBtn.addEventListener('click', function() {
+            noteModal.classList.remove('active');
+        });
+        
+        // Close note when clicking outside the paper
+        noteModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
+        });
+        
+    
+        
+        // Create floating hearts
+        function createHearts() {
+            const envelopeRect = envelope.getBoundingClientRect();
+            const hearts = ['❤️', '💕', '💖', '💗', '💓'];
+            
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                    
+                    // Random position around the envelope
+                    const x = envelopeRect.left + Math.random() * envelopeRect.width;
+                    const y = envelopeRect.top + envelopeRect.height / 2;
+                    
+                    heart.style.left = `${x}px`;
+                    heart.style.top = `${y}px`;
+                    
+                    // Random animation duration
+                    const duration = 2 + Math.random() * 2;
+                    heart.style.animationDuration = `${duration}s`;
+                    
+                    document.body.appendChild(heart);
+                    
+                    // Remove after animation completes
+                    setTimeout(() => {
+                        heart.remove();
+                    }, duration * 1000);
+                }, i * 200);
+            }
+        }
+        
+        // Add hover effect to envelope
+        envelope.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        envelope.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+        
+        // Add initial animation to draw attention
+        setTimeout(() => {
+            envelope.style.transform = 'translateY(-10px)';
+            setTimeout(() => {
+                envelope.style.transform = '';
+            }, 1000);
+        }, 1000);
+
+         // Redirect to song.html when button is clicked
+    document.getElementById('backBtn').addEventListener('click', function () {
+        window.location.href = 'song.html';
+    });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93f02ee3910f3e55',t:'MTc0NzExODYyMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border: none; visibility: hidden;"></iframe>
+</body></html>

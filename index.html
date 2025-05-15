@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="icon" href="favicon.ico" type="kiss mark" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Nunito:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+
+         /* Custom cursor styling */
+        body {
+        cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="%23FFFFFF" stroke="%23A3B18A" stroke-width="3.25" stroke-linejoin="round" d="M12 8S9.75 5 7 5a4.5 4.5 0 0 0-4.5 4.5C2.5 14.5 12 20 12 20s9.5-5.5 9.5-10.5A4.5 4.5 0 0 0 17 5c-2.75 0-5 3-5 3Z"></path></svg>') 18 18, auto;
+        }
+        
+        /* Love cursor for button */
+        .btn {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="%23FF6B6B" stroke="%23FF0000" stroke-width="2" stroke-linejoin="round" d="M12 8S9.75 5 7 5a4.5 4.5 0 0 0-4.5 4.5C2.5 14.5 12 20 12 20s9.5-5.5 9.5-10.5A4.5 4.5 0 0 0 17 5c-2.75 0-5 3-5 3Z"></path></svg>') 18 18, pointer;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #FEFAE0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Checkered background */
+        .checkered-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+        }
+        
+        .checkered-bg div {
+            background-color: #CCD5AE;
+            opacity: 0.7;
+        }
+        
+        .checkered-bg div:nth-child(odd) {
+            background-color: #FEFAE0;
+        }
+        
+        /* Main container */
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: rgba(254, 250, 224, 0.9);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            max-width: 350px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #CCD5AE;
+            backdrop-filter: blur(5px);
+            z-index: 1;
+            margin-bottom: 40px;
+        }
+        
+        /* Decorative elements */
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            z-index: 0;
+        }
+        
+        .corner-tl {
+            top: 0;
+            left: 0;
+            border-top: 3px solid #CCD5AE;
+            border-left: 3px solid #CCD5AE;
+            border-top-left-radius: 12px;
+        }
+        
+        .corner-tr {
+            top: 0;
+            right: 0;
+            border-top: 3px solid #CCD5AE;
+            border-right: 3px solid #CCD5AE;
+            border-top-right-radius: 12px;
+        }
+        
+        .corner-bl {
+            bottom: 0;
+            left: 0;
+            border-bottom: 3px solid #CCD5AE;
+            border-left: 3px solid #CCD5AE;
+            border-bottom-left-radius: 12px;
+        }
+        
+        .corner-br {
+            bottom: 0;
+            right: 0;
+            border-bottom: 3px solid #CCD5AE;
+            border-right: 3px solid #CCD5AE;
+            border-bottom-right-radius: 12px;
+        }
+        
+        .leaf {
+            position: absolute;
+            font-size: 18px;
+            opacity: 0.7;
+            z-index: 0;
+        }
+        
+        .leaf1 { top: 15px; left: 15px; transform: rotate(-15deg); }
+        .leaf2 { top: 15px; right: 15px; transform: rotate(15deg); }
+        .leaf3 { bottom: 15px; left: 15px; transform: rotate(-30deg); }
+        .leaf4 { bottom: 15px; right: 15px; transform: rotate(30deg); }
+        
+        /* Typography */
+        h1 {
+            color: #606C38;
+            margin-bottom: 20px;
+            font-weight: 500;
+            font-size: 26px;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #CCD5AE;
+            border-radius: 10px;
+        }
+        
+        p {
+            color: #6C7B52;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-size: 15px;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Button styling */
+        .btn {
+            background-color: #CCD5AE;
+            color: #606C38;
+            border: none;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 12px rgba(204, 213, 174, 0.5);
+            font-family: 'Nunito', sans-serif;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(204, 213, 174, 0.6);
+            background-color: #D4E09B;
+        }
+        
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px rgba(204, 213, 174, 0.4);
+        }
+        
+        /* Animation elements */
+        .floating-item {
+            position: absolute;
+            font-size: 20px;
+            pointer-events: none;
+            animation: float 8s infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
+        }
+        
+        .heart-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #CCD5AE;
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+        
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #CCD5AE;
+            border-radius: 50%;
+        }
+        
+        .heart::before {
+            top: -5px;
+            left: 0;
+        }
+        
+        .heart::after {
+            top: 0;
+            left: -5px;
+        }
+        
+        /* Small checkered pattern inside container */
+        .mini-checkered {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .mini-checkered div {
+            background-color: #CCD5AE;
+        }
+        
+        .mini-checkered div:nth-child(even) {
+            background-color: transparent;
+        }
+        
+        /* Countdown styling */
+        .countdown {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #6C7B52;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        /* Footer styling */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            font-family: 'Nunito', sans-serif;
+            font-size: 14px;
+            color: #6C7B52;
+            background-color: rgba(254, 250, 224, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 2;
+            border-top: 1px solid rgba(204, 213, 174, 0.5);
+        }
+        
+        .footer span {
+            font-weight: 600;
+            color: #606C38;
+        }
+    </style>
+</head>
+<body>
+    <!-- Checkered background -->
+    <div class="checkered-bg" id="checkeredBg"></div>
+    
+    <div class="container">
+        <!-- Decorative corners -->
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+        
+        <!-- Leaf decorations -->
+        <div class="leaf leaf1">🌿</div>
+        <div class="leaf leaf2">🌱</div>
+        <div class="leaf leaf3">☘️</div>
+        <div class="leaf leaf4">🍃</div>
+        
+        <!-- Mini checkered pattern -->
+        <div class="mini-checkered" id="miniCheckered"></div>
+        
+        <h1>Hi Baby</h1>
+        <p>Just a small way to show how much you mean to me</p>
+        <button class="btn" id="startBtn">Click Me!</button>
+        <div class="countdown" id="countdown">Redirecting in 3 seconds...</div>
+        
+        <div class="heart-container" id="heartContainer"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">Made by <span>Lellobyy</span></div>
+
+    <script>
+        // Create checkered background
+        const checkeredBg = document.getElementById('checkeredBg');
+        for (let i = 0; i < 100; i++) {
+            const square = document.createElement('div');
+            checkeredBg.appendChild(square);
+        }
+        
+        // Create mini checkered pattern
+        const miniCheckered = document.getElementById('miniCheckered');
+        for (let i = 0; i < 16; i++) {
+            const square = document.createElement('div');
+            miniCheckered.appendChild(square);
+        }
+        
+        const startBtn = document.getElementById('startBtn');
+        const heartContainer = document.getElementById('heartContainer');
+        const countdown = document.getElementById('countdown');
+        
+        function createFloatingItems() {
+            const items = ['✨', '🌼', '🍃', '🌱', '🌿', '🍀'];
+            const btn = startBtn.getBoundingClientRect();
+            const btnCenterX = btn.left + btn.width/2;
+            const btnCenterY = btn.top + btn.height/2;
+            
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const item = document.createElement('div');
+                    item.className = 'floating-item';
+                    item.textContent = items[Math.floor(Math.random() * items.length)];
+                    
+                    // Position around the button
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 20 + Math.random() * 30;
+                    const x = btnCenterX + Math.cos(angle) * distance - 10;
+                    const y = btnCenterY + Math.sin(angle) * distance - 10;
+                    
+                    item.style.left = `${x}px`;
+                    item.style.top = `${y}px`;
+                    
+                    // Random animation duration
+                    const duration = 3 + Math.random() * 2;
+                    item.style.animationDuration = `${duration}s`;
+                    
+                    document.body.appendChild(item);
+                    
+                    // Remove after animation completes
+                    setTimeout(() => {
+                        item.remove();
+                    }, duration * 1000);
+                }, i * 150);
+            }
+        }
+        
+        function createHearts() {
+            const containerRect = heartContainer.getBoundingClientRect();
+            
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    
+                    // Random position at the bottom
+                    const x = Math.random() * containerRect.width;
+                    heart.style.left = `${x}px`;
+                    heart.style.bottom = '0';
+                    
+                    // Random size
+                    const size = 5 + Math.random() * 10;
+                    heart.style.width = `${size}px`;
+                    heart.style.height = `${size}px`;
+                    heart.style.opacity = '0.7';
+                    
+                    // Random animation
+                    const duration = 2 + Math.random() * 3;
+                    const delay = Math.random() * 0.5;
+                    
+                    heart.animate([
+                        { transform: 'translateY(0) rotate(45deg) scale(1)', opacity: 0.7 },
+                        { transform: 'translateY(-100px) rotate(45deg) scale(0)', opacity: 0 }
+                    ], {
+                        duration: duration * 1000,
+                        easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                        delay: delay * 1000
+                    });
+                    
+                    heartContainer.appendChild(heart);
+                    
+                    // Remove after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, (duration + delay) * 1000);
+                }, i * 100);
+            }
+        }
+        
+        // Animate checkered pattern on hover
+        const container = document.querySelector('.container');
+        container.addEventListener('mouseenter', function() {
+            const squares = checkeredBg.querySelectorAll('div');
+            squares.forEach((square, index) => {
+                setTimeout(() => {
+                    square.style.transition = 'opacity 0.3s ease';
+                    square.style.opacity = '0.9';
+                }, index * 10);
+            });
+        });
+        
+        container.addEventListener('mouseleave', function() {
+            const squares = checkeredBg.querySelectorAll('div');
+            squares.forEach((square, index) => {
+                setTimeout(() => {
+                    square.style.transition = 'opacity 0.3s ease';
+                    square.style.opacity = '0.7';
+                }, index * 10);
+            });
+        });
+        
+        startBtn.addEventListener('click', function() {
+            // Disable button after click
+            this.disabled = true;
+            
+            // Show countdown
+            countdown.style.opacity = '1';
+            
+            // Button animation
+            this.animate([
+                { transform: 'scale(0.95)' },
+                { transform: 'scale(1)' }
+            ], {
+                duration: 150,
+                easing: 'ease-out'
+            });
+            
+            // Change button text
+            this.textContent = 'Preparing...';
+            
+            // Create floating items
+            createFloatingItems();
+            
+            // Create hearts
+            createHearts();
+            
+            // Animate checkered background
+            const squares = checkeredBg.querySelectorAll('div');
+            squares.forEach((square, index) => {
+                setTimeout(() => {
+                    square.style.transition = 'background-color 0.3s ease';
+                    square.style.backgroundColor = index % 2 === 0 ? '#E9EDC9' : '#CCD5AE';
+                    
+                    setTimeout(() => {
+                        square.style.backgroundColor = index % 2 === 0 ? '#CCD5AE' : '#FEFAE0';
+                    }, 300);
+                }, index * 5);
+            });
+            
+            // Start countdown
+            let seconds = 2;
+            countdown.textContent = `Redirecting in ${seconds} seconds...`;
+            
+            const countdownInterval = setInterval(() => {
+                seconds--;
+                countdown.textContent = `Redirecting in ${seconds} second${seconds !== 1 ? 's' : ''}...`;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    // Redirect to green/memory.html
+                    window.location.href = "memory.html";
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
